@@ -1,6 +1,6 @@
 # Cloning_CLI
 
-A Next.js-based website cloning agent dashboard that accepts a website prompt, resolves the target URL, fetches page data, captures a screenshot, extracts structure/design hints, and generates a simplified HTML/CSS/JS landing-page clone with live preview.
+Cloning_CLI is a Next.js-based website cloning agent dashboard that accepts a website prompt, resolves the target URL, fetches page data, captures a screenshot, extracts structure/design hints, and generates a simplified HTML/CSS/JS landing-page clone with live preview.
 
 ## Live Demo
 
@@ -8,25 +8,31 @@ https://cloning-cli.vercel.app/
 
 ## Screenshots
 
-![Dashboard idle / initial state](docs/images/dashboard-idle.png)
+Dashboard idle state
 
-![Agent run completed with generated files](docs/images/dashboard-result.png)
+![Dashboard idle](public/screenshots/dashboard-idle.png)
 
-![Generated Scaler-style preview](docs/images/generated-preview.png)
+Agent run completed with generated files
+
+![Agent run completed](public/screenshots/agent-completed.png)
+
+Generated Scaler-style landing page preview
+
+![Generated Scaler-style preview](public/screenshots/generated-preview.png)
 
 ## Features
 
 - Cursor-style agent dashboard
-- Visible `START` / `THINK` / `TOOL` / `OBSERVE` / `OUTPUT` loop
+- Visible `START` / `THINK` / `TOOL` / `OBSERVE` / `OUTPUT` execution trace
 - URL resolution from natural language prompts
 - Website HTML/CSS extraction
-- Screenshot capture via Microlink
+- Screenshot capture using Microlink
 - Screenshot + extracted structure grounded generation
 - Generates `index.html`, `styles.css`, and `script.js`
-- Live preview and fullscreen preview
-- Code viewer for generated files
+- Live preview
+- Code viewer
 - Copy/download exports
-- Local fallback if model generation fails
+- Local fallback when generation fails
 
 ## Tech Stack
 
@@ -34,22 +40,22 @@ https://cloning-cli.vercel.app/
 - TypeScript
 - Tailwind CSS
 - Vercel
-- Microlink screenshot API
-- LLM provider integration
+- Microlink screenshot capture
+- LLM-powered generation layer
 
-The current implementation can use a configured multimodal LLM through environment variables. The generation layer is provider-swappable and can be adapted for Gemini, GPT, Claude/Anthropic, or other multimodal-capable models.
+The current implementation uses environment-configured model settings. The generation layer can be adapted for multimodal providers such as Gemini, GPT, Claude/Anthropic, or equivalent models.
 
 ## How It Works
 
 1. User enters a website cloning prompt.
-2. The app resolves the target website URL.
+2. The app resolves the target URL.
 3. The backend fetches HTML and linked CSS.
-4. The backend captures a rendered screenshot.
+4. The backend captures a screenshot.
 5. The extractor collects nav links, headings, buttons, footer hints, and design tokens.
-6. The LLM generates `HTML`, `CSS`, and `JS` in one generation step.
+6. The generation layer creates HTML/CSS/JS from screenshot + extracted structure.
 7. The validator checks structure and theme consistency.
-8. A local fallback template is used if generation fails.
-9. The dashboard renders the live preview and generated files.
+8. Fallback template is used if generation fails.
+9. The dashboard renders generated files and live preview.
 
 ## Agent Loop
 
@@ -77,8 +83,6 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`.
-
 ## Environment Variables
 
 ```bash
@@ -87,7 +91,9 @@ GEMINI_MODEL=
 SCREENSHOT_PROVIDER=microlink
 ```
 
-`GEMINI_MODEL` is used by the current implementation. The generation layer can be adapted for other multimodal providers without changing the dashboard flow.
+- `GEMINI_*` variables are used by the current generation implementation.
+- `SCREENSHOT_PROVIDER=microlink` enables public Microlink screenshot capture.
+- API keys must stay server-side.
 
 ## Production Build
 
@@ -99,18 +105,12 @@ npm run build
 
 The app is deployed on Vercel.
 
-To deploy your own version:
+To deploy your own:
 
-1. Push the repo to GitHub.
-2. Import it into Vercel.
-3. Add the required environment variables.
-4. Deploy.
-
-## Demo Prompt
-
-```text
-Clone Scaler Academy website
-```
+- Push repository to GitHub.
+- Import the repo into Vercel.
+- Add environment variables.
+- Deploy.
 
 ## Assignment Mapping
 
@@ -120,22 +120,22 @@ Clone Scaler Academy website
 | Agent reasoning loop | `START` / `THINK` / `TOOL` / `OBSERVE` / `OUTPUT` trace |
 | Tool usage | URL resolver, fetcher, screenshot capture, extractor, generator |
 | Output files | HTML, CSS, JS virtual files |
-| Scaler landing page clone | Demo prompt generates a Scaler-inspired page |
+| Scaler landing page clone | Demo prompt generates Scaler-style landing page |
 | Preview | Live iframe preview |
 | GitHub/Vercel readiness | Next.js app with production build |
-| Documentation | README and screenshots |
+| Documentation | README with screenshots and setup |
 
 ## Limitations
 
-- The generated result is a simplified landing-page clone, not a pixel-perfect reproduction.
-- Some websites block scraping, CSS fetching, or screenshot capture.
-- Dynamic content may not fully reproduce.
-- Output quality depends on extracted data, screenshot availability, and the selected model.
+- Not intended for pixel-perfect cloning.
+- Some websites block scraping or screenshot capture.
+- Dynamic/interactive sections may not fully reproduce.
+- Output quality depends on screenshot availability, extracted data, and selected model.
 
 ## Safety / Design Notes
 
-- No shell execution
-- No database
-- No authentication
-- API keys stay server-side
-- Generated files are virtual and downloadable
+- No shell execution.
+- No database.
+- No authentication.
+- API keys remain server-side.
+- Generated files are virtual and downloadable.
